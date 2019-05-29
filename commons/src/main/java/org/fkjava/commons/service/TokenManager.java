@@ -41,7 +41,7 @@ public class TokenManager {
 				// 3.调用远程接口获取令牌，并在获取到令牌以后，把令牌存储在Redis里面
 				// 增加分布式锁： 如果key不存在则设置进去；而如果key存在则等待60秒才能设置进去
 				Boolean result = accessTokenTemplate.boundValueOps("weixin_access_token_lock")//
-						.setIfAbsent(new AccessToken());
+						.setIfAbsent(new AccessToken(), 3, TimeUnit.MINUTES);
 				LOG.trace("增加分布式锁的结果：{}", result);
 				if (result == true) {
 					try {
